@@ -7,7 +7,14 @@
     "start": "node src/server.js",
     "test": "node --test"
   },
-  "keywords": ["incidentes", "github-issues", "calidad-software"],
+  "keywords": [
+    "incidentes",
+    "github-issues",
+    "calidad-software"
+  ],
   "author": "ChriSHM29",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  }
 }
