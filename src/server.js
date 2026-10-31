@@ -17,12 +17,45 @@ const server = http.createServer((req, res) => {
     let body = '';
     req.on('data', chunk => { body += chunk; });
     req.on('end', () => {
-      // DEFECTO INTENCIONAL: Error 500 no controlado al procesar credenciales
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({
-        status: 500,
-        message: 'Internal Server Error: Uncaught exception in auth controller'
-      }));
+      try {
+        const credentials = body ? JSON.parse(body) : {};
+        const { username, password } = credentials;
+
+        if (!username || !password) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            status: 400,
+            error: 'Bad Request',
+            message: 'El nombre de usuario y la contraseña son requeridos'
+          }));
+        }
+
+        // Validación controlada de credenciales
+        if (username === 'admin' && password === 'admin123') {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            status: 200,
+            token: 'jwt-auth-session-token-valid',
+            user: { username: 'admin', role: 'ADMINISTRATOR' },
+            message: 'Inicio de sesión exitoso. Redirigiendo al panel principal.'
+          }));
+        }
+
+        // Credenciales inválidas
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          status: 401,
+          error: 'Unauthorized',
+          message: 'Credenciales inválidas. Verifique su usuario y contraseña.'
+        }));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          status: 400,
+          error: 'Bad Request',
+          message: 'Formato de solicitud no válido (JSON malformado)'
+        }));
+      }
     });
     return;
   }
