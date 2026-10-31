@@ -1,0 +1,13 @@
+{
+  "name": "practica-seguimiento-incidentes",
+  "version": "1.0.0",
+  "description": "Práctica de seguimiento de incidentes con GitHub Issues",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "keywords": ["incidentes", "github-issues", "calidad-software"],
+  "author": "ChriSHM29",
+  "license": "MIT"
+}
